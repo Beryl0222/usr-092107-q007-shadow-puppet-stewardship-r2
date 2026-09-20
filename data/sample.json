@@ -1,0 +1,9 @@
+{
+  "event_id": "sample-007-001",
+  "event_type": "OBJECT_CLASSIFIED",
+  "aggregate_type": "puppet_object",
+  "aggregate_id": "shadow_puppet_stewardship-001",
+  "occurred_at": "2026-09-20T18:00:00+08:00",
+  "version": 1,
+  "summary": "登记皮影剧团藏用协同台的首条领域记录"
+}
