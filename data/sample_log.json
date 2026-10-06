@@ -1,0 +1,353 @@
+[
+  {
+    "event_id": "evt-001",
+    "event_type": "OBJECT_REGISTERED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-001",
+    "occurred_at": "2026-09-20T09:00:00+08:00",
+    "version": 1,
+    "summary": "登记清代牛皮老生头茬",
+    "payload": { "component": "头茬", "material": "牛皮", "era": "清代" }
+  },
+  {
+    "event_id": "evt-002",
+    "event_type": "OBJECT_CLASSIFIED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-001",
+    "occurred_at": "2026-09-20T09:05:00+08:00",
+    "version": 2,
+    "summary": "清代老物件定级为仅限研究",
+    "payload": { "usage_class": "heritage_research_only" }
+  },
+  {
+    "event_id": "evt-003",
+    "event_type": "DAMAGE_RECORDED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-001",
+    "occurred_at": "2026-09-20T09:10:00+08:00",
+    "version": 3,
+    "summary": "记录头茬帽翅处开裂病害",
+    "payload": { "condition": "帽翅左侧开裂约两厘米，皮面局部起翘", "photo_ids": ["photo-damage-001", "photo-damage-002"] }
+  },
+  {
+    "event_id": "evt-004",
+    "event_type": "REPAIR_DOCUMENTED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-001",
+    "occurred_at": "2026-09-22T15:00:00+08:00",
+    "version": 4,
+    "summary": "完成开裂修补并归档前后照片",
+    "payload": {
+      "method": "传统皮胶粘接，本色矿物颜料补色",
+      "before_photo_ids": ["photo-damage-001", "photo-damage-002"],
+      "after_photo_ids": ["photo-repair-001"],
+      "published": false
+    }
+  },
+  {
+    "event_id": "evt-005",
+    "event_type": "OBJECT_REGISTERED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-002",
+    "occurred_at": "2026-09-23T10:00:00+08:00",
+    "version": 1,
+    "summary": "登记现代仿制老生头茬",
+    "payload": { "component": "头茬", "material": "牛皮", "era": "现代仿制" }
+  },
+  {
+    "event_id": "evt-006",
+    "event_type": "OBJECT_CLASSIFIED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-002",
+    "occurred_at": "2026-09-23T10:05:00+08:00",
+    "version": 2,
+    "summary": "仿制品定级为替身道具",
+    "payload": { "usage_class": "substitute_prop" }
+  },
+  {
+    "event_id": "evt-007",
+    "event_type": "SUBSTITUTE_PROP_DESIGNATED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-002",
+    "occurred_at": "2026-09-23T10:06:00+08:00",
+    "version": 3,
+    "summary": "指定仿制品顶替清代老生头茬上场",
+    "payload": { "stands_in_for": "obj-001" }
+  },
+  {
+    "event_id": "evt-008",
+    "event_type": "OBJECT_REGISTERED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-003",
+    "occurred_at": "2026-09-23T10:10:00+08:00",
+    "version": 1,
+    "summary": "登记现代牛皮布景",
+    "payload": { "component": "布景", "material": "牛皮", "era": "现代" }
+  },
+  {
+    "event_id": "evt-009",
+    "event_type": "OBJECT_CLASSIFIED",
+    "aggregate_type": "puppet_object",
+    "aggregate_id": "obj-003",
+    "occurred_at": "2026-09-23T10:11:00+08:00",
+    "version": 2,
+    "summary": "布景定级为演出用品",
+    "payload": { "usage_class": "performance" }
+  },
+  {
+    "event_id": "evt-010",
+    "event_type": "SCRIPT_VERSION_REVIEWED",
+    "aggregate_type": "repertoire_version",
+    "aggregate_id": "rep-001",
+    "occurred_at": "2026-09-24T09:00:00+08:00",
+    "version": 1,
+    "summary": "审定传统剧目《杨家将》脚本版本",
+    "payload": {
+      "adaptation_type": "traditional",
+      "lyrics_source_review": { "source": "老艺人口传记录稿", "status": "approved" },
+      "occasion_review": { "occasions": ["下乡演出", "节庆汇演"], "status": "approved" },
+      "role_ids": ["role-laosheng", "role-dan"]
+    }
+  },
+  {
+    "event_id": "evt-011",
+    "event_type": "SCRIPT_VERSION_REVIEWED",
+    "aggregate_type": "repertoire_version",
+    "aggregate_id": "rep-002",
+    "occurred_at": "2026-09-24T09:30:00+08:00",
+    "version": 1,
+    "summary": "审定新时代改编《乡村振兴新唱》，与传统剧共用老生角色",
+    "payload": {
+      "adaptation_type": "new_era_adaptation",
+      "lyrics_source_review": { "source": "剧团新创唱词", "status": "approved" },
+      "occasion_review": { "occasions": ["下乡演出"], "status": "approved" },
+      "role_ids": ["role-laosheng"]
+    }
+  },
+  {
+    "event_id": "evt-012",
+    "event_type": "ROLE_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-001",
+    "occurred_at": "2026-09-25T09:00:00+08:00",
+    "version": 1,
+    "summary": "授予老艺人老生角色资格",
+    "payload": { "role_id": "role-laosheng" }
+  },
+  {
+    "event_id": "evt-013",
+    "event_type": "ACCOMPANIMENT_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-001",
+    "occurred_at": "2026-09-25T09:01:00+08:00",
+    "version": 2,
+    "summary": "授予老艺人司鼓资格",
+    "payload": { "instrument_type": "鼓" }
+  },
+  {
+    "event_id": "evt-014",
+    "event_type": "ROLE_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-002",
+    "occurred_at": "2026-09-25T09:05:00+08:00",
+    "version": 1,
+    "summary": "授予中年艺人老生角色资格",
+    "payload": { "role_id": "role-laosheng" }
+  },
+  {
+    "event_id": "evt-015",
+    "event_type": "ROLE_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-003",
+    "occurred_at": "2026-09-25T09:06:00+08:00",
+    "version": 1,
+    "summary": "授予学徒旦角资格",
+    "payload": { "role_id": "role-dan" }
+  },
+  {
+    "event_id": "evt-016",
+    "event_type": "ACCOMPANIMENT_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-004",
+    "occurred_at": "2026-09-25T09:10:00+08:00",
+    "version": 1,
+    "summary": "授予唢呐伴奏资格",
+    "payload": { "instrument_type": "唢呐" }
+  },
+  {
+    "event_id": "evt-017",
+    "event_type": "ACCOMPANIMENT_QUALIFICATION_GRANTED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-005",
+    "occurred_at": "2026-09-25T09:11:00+08:00",
+    "version": 1,
+    "summary": "授予司鼓伴奏资格",
+    "payload": { "instrument_type": "鼓" }
+  },
+  {
+    "event_id": "evt-018",
+    "event_type": "ARTIST_AVAILABILITY_CHANGED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-001",
+    "occurred_at": "2026-09-28T08:00:00+08:00",
+    "version": 3,
+    "summary": "高龄艺人因身体原因退出本次下乡",
+    "payload": { "status": "retired" }
+  },
+  {
+    "event_id": "evt-019",
+    "event_type": "ARTIST_AVAILABILITY_CHANGED",
+    "aggregate_type": "artist",
+    "aggregate_id": "artist-003",
+    "occurred_at": "2026-09-28T08:05:00+08:00",
+    "version": 2,
+    "summary": "学徒因故缺席本次下乡",
+    "payload": { "status": "absent", "is_minor": true }
+  },
+  {
+    "event_id": "evt-020",
+    "event_type": "INSTRUMENT_STATUS_CHANGED",
+    "aggregate_type": "instrument",
+    "aggregate_id": "inst-001",
+    "occurred_at": "2026-09-26T14:00:00+08:00",
+    "version": 1,
+    "summary": "大鼓登记为完好",
+    "payload": { "instrument_type": "鼓", "status": "operational" }
+  },
+  {
+    "event_id": "evt-021",
+    "event_type": "INSTRUMENT_STATUS_CHANGED",
+    "aggregate_type": "instrument",
+    "aggregate_id": "inst-001",
+    "occurred_at": "2026-09-29T10:00:00+08:00",
+    "version": 2,
+    "summary": "大鼓鼓面破裂记为故障",
+    "payload": { "instrument_type": "鼓", "status": "faulty" }
+  },
+  {
+    "event_id": "evt-022",
+    "event_type": "INSTRUMENT_STATUS_CHANGED",
+    "aggregate_type": "instrument",
+    "aggregate_id": "inst-001",
+    "occurred_at": "2026-09-30T16:00:00+08:00",
+    "version": 3,
+    "summary": "大鼓蒙皮修复恢复完好",
+    "payload": { "instrument_type": "鼓", "status": "operational" }
+  },
+  {
+    "event_id": "evt-023",
+    "event_type": "INSTRUMENT_STATUS_CHANGED",
+    "aggregate_type": "instrument",
+    "aggregate_id": "inst-002",
+    "occurred_at": "2026-09-26T14:01:00+08:00",
+    "version": 1,
+    "summary": "唢呐登记为完好",
+    "payload": { "instrument_type": "唢呐", "status": "operational" }
+  },
+  {
+    "event_id": "evt-024",
+    "event_type": "VENUE_CONDITIONS_CONFIRMED",
+    "aggregate_type": "venue",
+    "aggregate_id": "venue-001",
+    "occurred_at": "2026-10-01T09:00:00+08:00",
+    "version": 1,
+    "summary": "场地方确认演出日期与场地条件",
+    "payload": {
+      "confirmed_by": "村委会文化专干",
+      "performance_date": "2026-10-08",
+      "conditions": { "台口宽": "4米", "电源": "220V 已到位", "遮光": "可全遮", "容纳人数": 200 }
+    }
+  },
+  {
+    "event_id": "evt-025",
+    "event_type": "ROSTER_CONFIRMED",
+    "aggregate_type": "performance_roster",
+    "aggregate_id": "roster-001",
+    "occurred_at": "2026-10-01T10:00:00+08:00",
+    "version": 1,
+    "summary": "按最低阵容确认下乡演出阵容：老艺人退出、学徒缺席后仍可演出",
+    "payload": {
+      "performance_id": "perf-001",
+      "repertoire_version_id": "rep-001",
+      "minimum_cast": { "roles": { "role-laosheng": 1 }, "instruments": { "鼓": 1, "唢呐": 1 } },
+      "entries": [
+        { "artist_id": "artist-002", "role_id": "role-laosheng" },
+        { "artist_id": "artist-005", "instrument_type": "鼓" },
+        { "artist_id": "artist-004", "instrument_type": "唢呐" }
+      ]
+    }
+  },
+  {
+    "event_id": "evt-026",
+    "event_type": "TRANSPORT_MANIFEST_ISSUED",
+    "aggregate_type": "performance",
+    "aggregate_id": "perf-001",
+    "occurred_at": "2026-10-02T09:00:00+08:00",
+    "version": 1,
+    "summary": "开具运输清单：替身头茬与布景装车，清代老物件留库",
+    "payload": { "performance_id": "perf-001", "object_ids": ["obj-002", "obj-003"] }
+  },
+  {
+    "event_id": "evt-027",
+    "event_type": "OBJECT_CHECKED_OUT",
+    "aggregate_type": "loan_handoff",
+    "aggregate_id": "loan-obj-002",
+    "occurred_at": "2026-10-02T09:30:00+08:00",
+    "version": 1,
+    "summary": "替身老生头茬出库",
+    "payload": { "object_id": "obj-002", "purpose": "performance", "custodian": "道具组长", "expected_return_at": "2026-10-09" }
+  },
+  {
+    "event_id": "evt-028",
+    "event_type": "OBJECT_CHECKED_OUT",
+    "aggregate_type": "loan_handoff",
+    "aggregate_id": "loan-obj-003",
+    "occurred_at": "2026-10-02T09:31:00+08:00",
+    "version": 1,
+    "summary": "布景出库",
+    "payload": { "object_id": "obj-003", "purpose": "performance", "custodian": "道具组长", "expected_return_at": "2026-10-09" }
+  },
+  {
+    "event_id": "evt-029",
+    "event_type": "PERFORMANCE_LOGGED",
+    "aggregate_type": "performance",
+    "aggregate_id": "perf-001",
+    "occurred_at": "2026-10-08T20:30:00+08:00",
+    "version": 2,
+    "summary": "记录下乡演出实际执行",
+    "payload": { "performance_id": "perf-001", "venue_id": "venue-001", "repertoire_version_ids": ["rep-001", "rep-002"] }
+  },
+  {
+    "event_id": "evt-030",
+    "event_type": "OBJECT_CHECKED_IN",
+    "aggregate_type": "loan_handoff",
+    "aggregate_id": "loan-obj-002",
+    "occurred_at": "2026-10-09T11:00:00+08:00",
+    "version": 2,
+    "summary": "替身老生头茬归还入库，状况良好",
+    "payload": { "object_id": "obj-002", "returned_by": "道具组长", "condition_on_return": "完好，无新增病害" }
+  },
+  {
+    "event_id": "evt-031",
+    "event_type": "OBJECT_CHECKED_IN",
+    "aggregate_type": "loan_handoff",
+    "aggregate_id": "loan-obj-003",
+    "occurred_at": "2026-10-09T11:01:00+08:00",
+    "version": 2,
+    "summary": "布景归还入库，边角轻微磨损",
+    "payload": { "object_id": "obj-003", "returned_by": "道具组长", "condition_on_return": "边角轻微磨损，待观察" }
+  },
+  {
+    "event_id": "evt-032",
+    "event_type": "PUBLIC_QR_CONTENT_PUBLISHED",
+    "aggregate_type": "public_qr_content",
+    "aggregate_id": "qr-001",
+    "occurred_at": "2026-10-09T15:00:00+08:00",
+    "version": 1,
+    "summary": "发布扫码公开内容：皮影雕刻与操耍技艺故事",
+    "payload": {
+      "story": "鹤峰皮影以牛皮雕刻、关节操耍见长，本次下乡演出使用现代仿制影人，老物件留库保护。",
+      "reviewed_by": "剧团资料员"
+    }
+  }
+]

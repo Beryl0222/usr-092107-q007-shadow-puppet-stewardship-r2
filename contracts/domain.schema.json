@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "皮影剧团藏用协同台领域事件",
+  "description": "事件信封字段一经接收不得原地改写；更正通过 supersedes 指向被更正记录的新事件完成。业务数据一律放在 payload 中。修缮前后照片只增不删，因此事件类型中不存在任何删除照片的事件。",
   "type": "object",
   "required": [
     "event_id",
@@ -19,11 +20,23 @@
     "event_type": {
       "type": "string",
       "enum": [
+        "OBJECT_REGISTERED",
         "OBJECT_CLASSIFIED",
+        "DAMAGE_RECORDED",
         "REPAIR_DOCUMENTED",
+        "SUBSTITUTE_PROP_DESIGNATED",
+        "SCRIPT_VERSION_REVIEWED",
+        "ROLE_QUALIFICATION_GRANTED",
+        "ACCOMPANIMENT_QUALIFICATION_GRANTED",
+        "ARTIST_AVAILABILITY_CHANGED",
+        "INSTRUMENT_STATUS_CHANGED",
+        "VENUE_CONDITIONS_CONFIRMED",
         "ROSTER_CONFIRMED",
+        "TRANSPORT_MANIFEST_ISSUED",
         "OBJECT_CHECKED_OUT",
-        "PERFORMANCE_LOGGED"
+        "OBJECT_CHECKED_IN",
+        "PERFORMANCE_LOGGED",
+        "PUBLIC_QR_CONTENT_PUBLISHED"
       ]
     },
     "aggregate_type": {
@@ -31,8 +44,13 @@
       "enum": [
         "puppet_object",
         "repertoire_version",
+        "artist",
+        "instrument",
+        "venue",
+        "performance",
         "performance_roster",
-        "loan_handoff"
+        "loan_handoff",
+        "public_qr_content"
       ]
     },
     "aggregate_id": {
@@ -45,12 +63,339 @@
     },
     "version": {
       "type": "integer",
-      "minimum": 1
+      "minimum": 1,
+      "description": "同一聚合内从 1 开始逐条递增，不得跳号或回退"
     },
     "summary": {
       "type": "string",
       "minLength": 1
+    },
+    "supersedes": {
+      "type": "string",
+      "minLength": 1,
+      "description": "更正时填写被更正事件的 event_id；原记录保留不删"
+    },
+    "payload": {
+      "type": "object"
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "const": "OBJECT_REGISTERED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "puppet_object" },
+          "payload": {
+            "type": "object",
+            "required": ["component", "material", "era"],
+            "properties": {
+              "component": { "type": "string", "minLength": 1, "description": "部件，如头茬、身段、布景、道具" },
+              "material": { "type": "string", "minLength": 1, "description": "材质，如牛皮、驴皮、纸" },
+              "era": { "type": "string", "minLength": 1, "description": "年代，如明代、清代、民国、现代仿制" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBJECT_CLASSIFIED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "puppet_object" },
+          "payload": {
+            "type": "object",
+            "required": ["usage_class"],
+            "properties": {
+              "usage_class": {
+                "type": "string",
+                "enum": ["heritage_research_only", "controlled_display", "performance", "substitute_prop"],
+                "description": "老物件默认 heritage_research_only，仅用于研究或受控展示"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "DAMAGE_RECORDED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "puppet_object" },
+          "payload": {
+            "type": "object",
+            "required": ["condition", "photo_ids"],
+            "properties": {
+              "condition": { "type": "string", "minLength": 1, "description": "病害描述" },
+              "photo_ids": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "病害照片，归档后不得删除" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "REPAIR_DOCUMENTED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "puppet_object" },
+          "payload": {
+            "type": "object",
+            "required": ["method", "before_photo_ids", "after_photo_ids"],
+            "properties": {
+              "method": { "type": "string", "minLength": 1, "description": "修缮方法" },
+              "before_photo_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "after_photo_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "published": { "type": "boolean", "description": "修复细节是否已公开发表；未发表者不得进入扫码内容" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SUBSTITUTE_PROP_DESIGNATED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "puppet_object" },
+          "payload": {
+            "type": "object",
+            "required": ["stands_in_for"],
+            "properties": {
+              "stands_in_for": { "type": "string", "minLength": 1, "description": "所替代的老物件 aggregate_id" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SCRIPT_VERSION_REVIEWED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "repertoire_version" },
+          "payload": {
+            "type": "object",
+            "required": ["adaptation_type", "lyrics_source_review", "occasion_review", "role_ids"],
+            "properties": {
+              "adaptation_type": { "type": "string", "enum": ["traditional", "new_era_adaptation"], "description": "传统剧目与新时代改编可共用角色" },
+              "lyrics_source_review": {
+                "type": "object",
+                "required": ["source", "status"],
+                "properties": {
+                  "source": { "type": "string", "minLength": 1, "description": "唱词来源" },
+                  "status": { "type": "string", "enum": ["approved", "rejected"] }
+                },
+                "description": "唱词来源审定，与适用场合审定相互独立"
+              },
+              "occasion_review": {
+                "type": "object",
+                "required": ["occasions", "status"],
+                "properties": {
+                  "occasions": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "适用场合" },
+                  "status": { "type": "string", "enum": ["approved", "rejected"] }
+                }
+              },
+              "role_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ROLE_QUALIFICATION_GRANTED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "artist" },
+          "payload": {
+            "type": "object",
+            "required": ["role_id"],
+            "properties": { "role_id": { "type": "string", "minLength": 1 } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ACCOMPANIMENT_QUALIFICATION_GRANTED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "artist" },
+          "payload": {
+            "type": "object",
+            "required": ["instrument_type"],
+            "properties": { "instrument_type": { "type": "string", "minLength": 1 } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ARTIST_AVAILABILITY_CHANGED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "artist" },
+          "payload": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": { "type": "string", "enum": ["available", "absent", "retired"], "description": "高龄艺人退出记为 retired，学徒缺席记为 absent" },
+              "is_minor": { "type": "boolean", "description": "未成年人标记仅内部使用，不得进入扫码内容" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "INSTRUMENT_STATUS_CHANGED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "instrument" },
+          "payload": {
+            "type": "object",
+            "required": ["instrument_type", "status"],
+            "properties": {
+              "instrument_type": { "type": "string", "minLength": 1 },
+              "status": { "type": "string", "enum": ["operational", "faulty"], "description": "乐器故障记为 faulty" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VENUE_CONDITIONS_CONFIRMED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "venue" },
+          "payload": {
+            "type": "object",
+            "required": ["confirmed_by", "performance_date", "conditions"],
+            "properties": {
+              "confirmed_by": { "type": "string", "minLength": 1, "description": "场地方确认人" },
+              "performance_date": { "type": "string", "minLength": 1 },
+              "conditions": { "type": "object", "description": "场地条件：台口尺寸、电源、遮光、容纳人数等" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ROSTER_CONFIRMED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "performance_roster" },
+          "payload": {
+            "type": "object",
+            "required": ["performance_id", "repertoire_version_id", "minimum_cast", "entries"],
+            "properties": {
+              "performance_id": { "type": "string", "minLength": 1 },
+              "repertoire_version_id": { "type": "string", "minLength": 1 },
+              "minimum_cast": {
+                "type": "object",
+                "required": ["roles", "instruments"],
+                "properties": {
+                  "roles": { "type": "object", "description": "角色 id 到最低人数的映射", "additionalProperties": { "type": "integer", "minimum": 1 } },
+                  "instruments": { "type": "object", "description": "乐器类型到最低件数的映射", "additionalProperties": { "type": "integer", "minimum": 1 } }
+                },
+                "description": "节目最低阵容；高龄退出、学徒缺席或乐器故障时据此判断是否还能演出"
+              },
+              "entries": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["artist_id"],
+                  "properties": {
+                    "artist_id": { "type": "string", "minLength": 1 },
+                    "role_id": { "type": "string" },
+                    "instrument_type": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "TRANSPORT_MANIFEST_ISSUED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "performance" },
+          "payload": {
+            "type": "object",
+            "required": ["performance_id", "object_ids"],
+            "properties": {
+              "performance_id": { "type": "string", "minLength": 1 },
+              "object_ids": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "运输清单；老物件不得因演出目的进入清单" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBJECT_CHECKED_OUT" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "loan_handoff" },
+          "payload": {
+            "type": "object",
+            "required": ["object_id", "purpose", "custodian", "expected_return_at"],
+            "properties": {
+              "object_id": { "type": "string", "minLength": 1 },
+              "purpose": { "type": "string", "enum": ["research", "controlled_display", "rehearsal", "performance", "external_repair"] },
+              "custodian": { "type": "string", "minLength": 1, "description": "接收责任人" },
+              "expected_return_at": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBJECT_CHECKED_IN" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "loan_handoff" },
+          "payload": {
+            "type": "object",
+            "required": ["object_id", "returned_by", "condition_on_return"],
+            "properties": {
+              "object_id": { "type": "string", "minLength": 1 },
+              "returned_by": { "type": "string", "minLength": 1 },
+              "condition_on_return": { "type": "string", "minLength": 1, "description": "归还时状况，构成闭环" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "PERFORMANCE_LOGGED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "performance" },
+          "payload": {
+            "type": "object",
+            "required": ["performance_id", "venue_id", "repertoire_version_ids"],
+            "properties": {
+              "performance_id": { "type": "string", "minLength": 1 },
+              "venue_id": { "type": "string", "minLength": 1 },
+              "repertoire_version_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "PUBLIC_QR_CONTENT_PUBLISHED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "public_qr_content" },
+          "payload": {
+            "type": "object",
+            "required": ["story", "reviewed_by"],
+            "properties": {
+              "story": { "type": "string", "minLength": 1, "description": "技艺故事等可公开介绍的内容" },
+              "reviewed_by": { "type": "string", "minLength": 1, "description": "发布前审定人" }
+            },
+            "description": "不得包含藏品库位、未成年人资料、未公开修复细节"
+          }
+        }
+      }
+    }
+  ]
 }
