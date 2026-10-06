@@ -5,5 +5,15 @@
   "aggregate_id": "shadow_puppet_stewardship-001",
   "occurred_at": "2026-09-20T18:00:00+08:00",
   "version": 1,
-  "summary": "登记皮影剧团藏用协同台的首条领域记录"
+  "summary": "登记皮影剧团藏用协同台的首条领域记录：一件默认仅供研究的传世影偶",
+  "payload": {
+    "name": "示例·传世影人",
+    "category": "整身影偶",
+    "material": "驴皮硝制雕刻",
+    "era": "清代",
+    "year_estimate": "约19世纪",
+    "use_policy": "research",
+    "storage_location": "示例库位（内部字段，不进公开扫码）",
+    "heritage_note": "用于本地联调的中文样例"
+  }
 }
